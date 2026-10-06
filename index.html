@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Those Eyes</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('picture.jpg') no-repeat center center/cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+
+    
+    #start-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #start-btn {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: white;
+      background: #ff4b2b;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+      transition: transform 0.2s;
+    }
+
+    #start-btn:hover {
+      transform: scale(1.05);
+    }
+
+    #lyrics-container {
+      position: absolute;
+      bottom: 50px;
+      width: 85%;
+      max-width: 600px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(5px);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    #lyrics {
+      color: #ffffff;
+      font-size: 1.4rem;
+      font-weight: 600;
+      min-height: 2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="start-overlay">
+    <button id="start-btn" onclick="startExperience()">Click to Play ❤️</button>
+  </div>
+
+  <div id="lyrics-container">
+    <div id="lyrics"></div>
+  </div>
+
+  <audio id="bg-music" src="thoseeyes.mp3"></audio>
+
+  <script>
+    const lyricsTimeline = [
+      { start: 1.5, words: [
+          { text: "'Cause ", dur: 300 }, { text: "all ", dur: 300 }, { text: "of ", dur: 200 }, { text: "the ", dur: 200 }, 
+          { text: "small ", dur: 1100 }, { text: "things ", dur: 1800 }, { text: "that ", dur: 300 }, { text: "you ", dur: 300 }, { text: "do", dur: 300 }
+      ]},
+      { start: 7.8, words: [
+          { text: "Are ", dur: 200 }, { text: "what ", dur: 300 }, { text: "remind ", dur: 900 }, { text: "me ", dur: 400 }, 
+          { text: "why ", dur: 1100 }, { text: "I ", dur: 200 }, { text: "fell ", dur: 600 }, { text: "for ", dur: 300 }, { text: "you", dur: 300 }
+      ]},
+      { start: 12.8, words: [
+          { text: "And ", dur: 200 }, { text: "when ", dur: 300 }, { text: "we're ", dur: 300 }, { text: "apart ", dur: 900 }, 
+          { text: "and ", dur: 1300 }, { text: "I'm ", dur: 1000 }, { text: "missing ", dur: 700 }, { text: "you", dur: 300 }
+      ]},
+      { start: 19.2, words: [
+          { text: "I ", dur: 200 }, { text: "close ", dur: 400 }, { text: "my ", dur: 300 }, { text: "eyes ", dur: 900 }, 
+          { text: "and ", dur: 1100 }, { text: "all ", dur: 300 }, { text: "I ", dur: 200 }, { text: "see ", dur: 600 }, { text: "is ", dur: 200 }, { text: "you", dur: 300 }
+      ]},
+      { start: 24.5, words: [
+          { text: "And ", dur: 1100 }, { text: "the ", dur: 200 }, { text: "small ", dur: 900 }, { text: "things ", dur: 500 }, 
+          { text: "you ", dur: 800 }, { text: "do...", dur: 100 }
+      ]}
+    ];
+
+    function startExperience() {
+      document.getElementById('start-overlay').style.display = 'none';
+      const audio = document.getElementById('bg-music');
+      audio.play();
+
+      const lyricsEl = document.getElementById('lyrics');
+
+      lyricsTimeline.forEach(line => {
+        setTimeout(() => {
+          lyricsEl.innerHTML = "";
+          let wordDelay = 0;
+
+          line.words.forEach(wordObj => {
+            setTimeout(() => {
+              typeWordSmooth(lyricsEl, wordObj.text, wordObj.dur);
+            }, wordDelay);
+            wordDelay += wordObj.dur;
+          });
+
+        }, line.start * 1000);
+      });
+    }
+
+    function typeWordSmooth(element, text, duration) {
+      let charDelay = duration / text.length;
+      text.split('').forEach((char, index) => {
+        setTimeout(() => {
+          element.innerHTML += char;
+        }, index * charDelay);
+      });
+    }
+  </script>
+</body>
+</html>
